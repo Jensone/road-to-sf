@@ -65,8 +65,8 @@ classDiagram
     -string email NN
     -string password NN
     -string roles
-    -DateTime created_at
-    -DateTime updated_at
+    -DateTime created_at NN
+    -DateTime updated_at NN
     -int warningCount NN
     -bool is_banned NN
     -bool is_active NN
