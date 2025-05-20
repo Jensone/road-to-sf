@@ -34,7 +34,7 @@ classDiagram
     -text content
     -bool is_published NN
     -bool is_archived NN
-    -DateTime createdA_at NN
+    -DateTime created_at NN
     -DateTime updated_at NN
     -User author NN
     -Comment comments
@@ -54,9 +54,9 @@ classDiagram
   class Comment {
     -int id
     -text content NN
-    -DateTime created_at
-    -bool is_moderated
-    -bool is_published
+    -DateTime created_at NN
+    -bool is_moderated NN
+    -bool is_published NN
     -User author NN
     -Article article
   }
