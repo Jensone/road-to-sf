@@ -28,6 +28,7 @@ class Article
     private ?string $slug = null;
     
     #[ORM\Column(length: 255)]
+    #[Assert\Length(max: 255, message: '{{ max }} caractères maximum')]
     #[Assert\Regex(pattern: '\.(jpg|jpeg|png|webp)$')]
     private ?string $image = 'default.png';
 
