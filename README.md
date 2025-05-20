@@ -48,7 +48,6 @@ classDiagram
     -DateTime created_at NN
     -DateTime updated_at NN
     -bool is_active NN
-    -Article article 
   }
 
   class Comment {
