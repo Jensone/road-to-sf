@@ -42,13 +42,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
-    private ?int $warningCount = null;
+    private ?int $warningCount = 0;
 
     #[ORM\Column]
-    private ?bool $is_banned = null;
+    private ?bool $is_banned = false;
 
     #[ORM\Column]
-    private ?bool $is_active = null;
+    private ?bool $is_active = false;
 
     /**
      * @var Collection<int, Article>
