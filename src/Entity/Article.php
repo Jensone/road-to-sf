@@ -82,18 +82,17 @@ class Article
      * La mise à jour des dates de création et de modification de l'entité
      */
     #[ORM\PrePersist] // Premier enregistrement d'un objet de l'entité
-    public function setCreatedAtValue(\DateTimeImmutable $created_at): void
+    public function setCreatedAtValue(): void
     {
-        $this->created_at = $created_at;
-        $this->setUpdatedAtValue($created_at);
+        $this->created_at = new \DateTimeImmutable();
+        $this->updated_at = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate] // Modification d'un objet de l'entité
-    public function setUpdatedAtValue(\DateTimeImmutable $updated_at): void
+    public function setUpdatedAtValue(): void
     {
-        $this->updated_at = $updated_at;
+        $this->updated_at = new \DateTimeImmutable();
     }
-
 
     public function getId(): ?int
     {
