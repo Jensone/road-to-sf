@@ -24,12 +24,12 @@ class Article
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255, message: '{{ max }} caractères maximum')]
-    #[Assert\Regex(pattern: '^[a-z0-9-]+$')]
+    #[Assert\Regex(pattern: '/^[a-z0-9-]+$/')]
     private ?string $slug = null;
     
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255, message: '{{ max }} caractères maximum')]
-    #[Assert\Regex(pattern: '\.(jpg|jpeg|png|webp)$')]
+    #[Assert\Regex(pattern: '/\.(jpg|jpeg|png|webp)$/')]
     private ?string $image = 'default.png';
 
     #[ORM\Column(length: 255, nullable: true)]
