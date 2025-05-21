@@ -108,18 +108,18 @@ Dans symfony, on utilise les `Annontations` pour mettre en place des validations
 
 ```php
 
-/...
+//...
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/...
+//...
 
     #[ORM\Column(length: 255)]
     #[Assert\Length(max: 255, message: '{{ max }} caractères maximum')]
     #[Assert\Regex(pattern: '/^[a-z0-9-]+$/')]
     private ?string $slug = null;
     
-/...
+//...
 
 ```
 
@@ -162,4 +162,65 @@ symfony console doctrine:fixtures:load
 symfony console d:f:l
 ```
 
+### Les fixtures en détail
+
+Dans les fixtures, il arrive que certaines d'entre elles soient nécessaires pour les autres. Par exemple, pour créer les articles, nous avons besoin des utilisateurs. Ou pour écrire les commentaires, nous avons besoin des articles.
+
+Dans cette configuration, nous allons utiliser des dépendances entre les fixtures.
+
+1 - Ajouter l'interface `DependentFixtureInterface` à la classe de la fixture qui à besoin d'une dépendance :
+
+```php
+//...
+
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
+class CommentFixtures extends Fixture implements DependentFixtureInterface
+
+//...
+
+```
+
+2 - Ajouter la méthode `getDependencies()` à la classe de la fixture qui à besoin d'une dépendance :
+
+```php
+//...
+
+public function getDependencies(): array
+{
+    return [
+        UserFixtures::class,
+        ArticleFixtures::class, 
+    ];
+}
+
+//...
+```
+
+3 - Dans le fichier `UserFixtures.php` et `ArticleFixtures.php`, ajouter les références :
+
+```php
+
+// $this->addReference($string, $object);
+
+$this->addReference('USER_' . $i, $user);
+
+```
+
+`$i` fait référence à l'index de la boucle dans le cas où on créer plusieurs objets comme un ensemble d'article ou de commantaire.
+
+4 - Pour finir, la récupération des objets ajoutés en référence dans les fixtures dépendantes :
+
+```php
+//...
+
+$users = [];
+for ($i = 0; $i < 100; $i++) {
+    $users[] = $this->getReference('USER_' . $i, User::class);
+}
+
+//...
+```
+
+ASTUCE : Pour savoir si des fixtures sont dépendantes en elles, il suffit de consulter le diagramme de classe de l'application.
 
