@@ -7,8 +7,8 @@
 
 {% for item in articles %}
     <h3>{{ item.title }}</h3>
-    <p>{{ item.id }}</p>
-<hr>
+    <a href="{{ path('article', { 'slug': item.slug }) }}">Voir l'article</a>
+    <hr>
 {% endfor %}
 
 {{ knp_pagination_render(articles) }}
