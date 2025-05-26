@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use App\Form\ArticleForm;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -124,6 +125,28 @@ final class ArticleController extends AbstractController
         // Enregistrer les modifications
         // Rediriger vers l'article
 
+    }
+
+    // Route "/article/new" pour créer un article
+    #[Route('/new', name: 'article_new', methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
+    {
+        $article = new Article(); // Nouvel objet article vide
+        $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
+        $form->handleRequest($request); // Traitement de la requête
+
+        // Traitement du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            $article->setAuthor($this->getUser()); // Récupération de l'utilisateur
+            $this->em->persist($article); // Enregistrement de l'article (query SQL)
+            $this->em->flush($article); // Exécution de l'enregistrement en BDD
+            $this->addFlash('success', "L'article a été créé"); // Message Flash Success
+            return $this->redirectToRoute('articles'); // Redirection vers l'article
+        }
+
+        return $this->render('article/new.html.twig', [
+            'articleForm' => $form, // Envoi du formulaire à la vue
+        ]);
     }
 
     // Route "/article/{slug}/status" pour publier ou archiver un article
