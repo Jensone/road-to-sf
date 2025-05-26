@@ -7,6 +7,6 @@
 
 {{ form(articleForm) }}
 
-<a href="{{ path('article, {'slug': article.slug }')}}">Retour à l'article</a>
+<a href="{{ path('article', {'slug': article.slug }) }}">Retour à l'article</a>
 
 {% endblock %}

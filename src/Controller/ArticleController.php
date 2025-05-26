@@ -51,7 +51,8 @@ final class ArticleController extends AbstractController
         $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
     
         return $this->render('article/edit.html.twig', [
-            'articleForm' => $form // Envoi du formulaire à la vue
+            'articleForm' => $form, // Envoi du formulaire à la vue
+            'article' => $article
         ]);
     }
 }
