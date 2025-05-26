@@ -16,8 +16,8 @@ final class ArticleController extends AbstractController
 {
     public function __construct(
         private ArticleRepository $ar,
-        EntityManagerInterface $em
-        ){}
+        private EntityManagerInterface $em
+    ) {}
 
     // Route "/articles" menant à la liste des articles
     #[Route('s', name: 'articles', methods: ['GET'])]
@@ -49,7 +49,23 @@ final class ArticleController extends AbstractController
     {
         $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
         $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
-    
+        $form->handleRequest($request); // Traitement de la requête
+
+        if ($form->isSubmitted() && $form->isValid()) // Si le form est soumis et valide
+        {
+            try {
+                $this->em->persist($article); // Enregistrement de l'article (query SQL)
+                $this->em->flush($article); // Exécution de l'enregistrement en BDD
+                $this->addFlash('success', 'Modification bien prise en compte'); // Message Flash Success
+            } catch (\Throwable $th) {
+                $this->addFlash('error', 'La modification a rencontré une erreur'); // Message Flash Error
+            }
+
+            // Redirection vers l'article modifié
+            return $this->redirectToRoute('article', ['slug' => $slug]); 
+        }
+
+
         return $this->render('article/edit.html.twig', [
             'articleForm' => $form, // Envoi du formulaire à la vue
             'article' => $article
