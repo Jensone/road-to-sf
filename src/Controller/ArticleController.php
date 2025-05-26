@@ -162,4 +162,22 @@ final class ArticleController extends AbstractController
         // On redirige l'utilisateur vers l'article
         return $this->redirectToRoute('article', ['slug' => $slug]);
     }
+
+    // Route "/article/{slug}/status" pour publier ou archiver un article
+    #[Route('/{slug}/delete', name: 'article_delete', methods: ['POST'])]
+    public function delete(string $slug): Response
+    {
+        $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
+
+        if (!$article) { // Ce sera ignorer si l'article existe
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
+        $this->em->remove($article); // Suppression de l'article (query SQL)
+        $this->em->flush($article); // Exécution de l'enregistrement en BDD
+
+        $this->addFlash('success', "Article supprimé avec succès");
+        return $this->redirectToRoute('articles');
+    }
 }
