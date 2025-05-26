@@ -9,8 +9,8 @@
 
 <a href="{{ path('articles')}}">Retour aux articles</a>
 <a href="{{ path('article_edit', {'slug': article.slug}) }}">Modifier</a>
-<a href="{{ path('article_publish', { 'slug': article.slug }) }}">{{ article.isPublished ? 'Brouillon' : 'Publier'  }}</a>
-<a href="#">Archiver</a>
+<a href="{{ path('article_status', { 'slug': article.slug }) }}?s=publish">{{ article.isPublished ? 'Brouillon' : 'Publier'  }}</a>
+<a href="{{ path('article_status', { 'slug': article.slug }) }}?s=archive">{{ article.isArchived ? 'Désarchiver' : 'Archiver'  }}</a>
 <form action="#" method="post">
     <button type="submit">Supprimer</button>
 </form>

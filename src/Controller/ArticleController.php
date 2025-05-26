@@ -103,10 +103,10 @@ final class ArticleController extends AbstractController
 
         $this->em->persist($article); // Enregistrement de l'article (query SQL)
         $this->em->flush($article); // Exécution de l'enregistrement en BDD
-        
+
         // On créer un message flash
         $this->addFlash('success', $article->isPublished() ? "Article publié" : "Mis en brouillon");
-        
+
         // On redirige l'utilisateur vers l'article
         return $this->redirectToRoute('article', ['slug' => $slug]);
     }
@@ -119,10 +119,47 @@ final class ArticleController extends AbstractController
         // Récupérer l'article
         // Vérifier que l'article existe
         // Vérifier que l'article est archivé
-            // OUI : Le désarchiver
-            // NON : L'archiver
+        // OUI : Le désarchiver
+        // NON : L'archiver
         // Enregistrer les modifications
         // Rediriger vers l'article
 
+    }
+
+    // Route "/article/{slug}/status" pour publier ou archiver un article
+    #[Route('/{slug}/status', name: 'article_status', methods: ['GET'])]
+    public function status(string $slug, Request $request): Response
+    {
+        $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
+
+        if (!$article) { // Ce sera ignorer si l'article existe
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
+        if (!$article) { // Ce sera ignorer si l'article existe
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
+        $action = $request->query->get('s');
+
+        if($action === 'publish') {
+            $article->isPublished() ? $article->setIsPublished(false) : $article->setIsPublished(true);
+        } else if ($action === 'archive') {
+            $article->setIsArchived(!$article->isArchived());
+        } else {
+            $this->addFlash('error', "Action non reconnue");
+            return $this->redirectToRoute('article', ['slug' => $slug]);
+        }
+
+        $this->em->persist($article); // Enregistrement de l'article (query SQL)
+        $this->em->flush($article); // Exécution de l'enregistrement en BDD
+
+        // On créer un message flash
+        $this->addFlash('success', "Enregistré avec succès");
+
+        // On redirige l'utilisateur vers l'article
+        return $this->redirectToRoute('article', ['slug' => $slug]);
     }
 }
