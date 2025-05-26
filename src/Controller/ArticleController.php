@@ -38,8 +38,15 @@ final class ArticleController extends AbstractController
     #[Route('/{slug}', name: 'article', methods: ['GET'])]
     public function view(string $slug): Response
     {
+        $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
+
+        if (!$article) {
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
         return $this->render('article/view.html.twig', [
-            'article' => $this->ar->findOneBySlug($slug)
+            'article' => $article
         ]);
     }
 
@@ -48,6 +55,12 @@ final class ArticleController extends AbstractController
     public function edit(string $slug, Request $request): Response
     {
         $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
+
+        if (!$article) {
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
         $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
         $form->handleRequest($request); // Traitement de la requête
 
@@ -62,13 +75,54 @@ final class ArticleController extends AbstractController
             }
 
             // Redirection vers l'article modifié
-            return $this->redirectToRoute('article', ['slug' => $slug]); 
+            return $this->redirectToRoute('article', ['slug' => $slug]);
         }
-
 
         return $this->render('article/edit.html.twig', [
             'articleForm' => $form, // Envoi du formulaire à la vue
             'article' => $article
         ]);
+    }
+
+    // Route "/article/{slug}/publish" pour publier un article
+    #[Route('/{slug}/publish', name: 'article_publish', methods: ['GET'])]
+    public function publish(string $slug): Response
+    {
+        $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
+
+        if (!$article) { // Ce sera ignorer si l'article existe
+            $this->addFlash('error', "L'article n'existe pas");
+            return $this->redirectToRoute('articles');
+        }
+
+        if ($article->isPublished()) { // Si l'article est déjà publié
+            $article->setIsPublished(false); // On le met en brouillon
+        } else { // Sinon
+            $article->setIsPublished(true); // On le met en public
+        }
+
+        $this->em->persist($article); // Enregistrement de l'article (query SQL)
+        $this->em->flush($article); // Exécution de l'enregistrement en BDD
+        
+        // On créer un message flash
+        $this->addFlash('success', $article->isPublished() ? "Article publié" : "Mis en brouillon");
+        
+        // On redirige l'utilisateur vers l'article
+        return $this->redirectToRoute('article', ['slug' => $slug]);
+    }
+
+    // Route "/article/{slug}/archive" pour publier un article
+    #[Route('/{slug}/archive', name: 'article_archive', methods: ['GET'])]
+    public function archive(string $slug): Response
+    {
+
+        // Récupérer l'article
+        // Vérifier que l'article existe
+        // Vérifier que l'article est archivé
+            // OUI : Le désarchiver
+            // NON : L'archiver
+        // Enregistrer les modifications
+        // Rediriger vers l'article
+
     }
 }
