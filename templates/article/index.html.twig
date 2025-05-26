@@ -5,5 +5,9 @@
 {% block body %}
 <h1>Les articles</h1>
 
-{{ dump(articles) }}
+{% for item in articles %}
+    <h3>{{ item.title }}</h3>
+    <a href="{{ path('article', {'slug': item.slug}) }}">Voir l'article</a>
+{% endfor %}
+
 {% endblock %}
