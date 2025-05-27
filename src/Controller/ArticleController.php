@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/article')]
 final class ArticleController extends AbstractController
@@ -35,7 +36,29 @@ final class ArticleController extends AbstractController
         ]);
     }
 
-    // Route "/article" menant à un article
+    // Route "/article/new" pour créer un article
+    #[Route('/new', name: 'article_new', methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
+    {
+        $article = new Article(); // Nouvel objet article vide
+        $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
+        $form->handleRequest($request); // Traitement de la requête
+
+        // Traitement du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            $article->setAuthor($this->getUser()); // Récupération de l'utilisateur
+            $this->em->persist($article); // Enregistrement de l'article (query SQL)
+            $this->em->flush($article); // Exécution de l'enregistrement en BDD
+            $this->addFlash('success', "L'article a été créé"); // Message Flash Success
+            return $this->redirectToRoute('articles'); // Redirection vers l'article
+        }
+
+        return $this->render('article/new.html.twig', [
+            'articleForm' => $form, // Envoi du formulaire à la vue
+        ]);
+    }
+
+    // Route "/article/{slug}" menant à un article
     #[Route('/{slug}', name: 'article', methods: ['GET'])]
     public function view(string $slug): Response
     {
@@ -125,28 +148,6 @@ final class ArticleController extends AbstractController
         // Enregistrer les modifications
         // Rediriger vers l'article
 
-    }
-
-    // Route "/article/new" pour créer un article
-    #[Route('/new', name: 'article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
-        $article = new Article(); // Nouvel objet article vide
-        $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
-        $form->handleRequest($request); // Traitement de la requête
-
-        // Traitement du formulaire
-        if ($form->isSubmitted() && $form->isValid()) {
-            $article->setAuthor($this->getUser()); // Récupération de l'utilisateur
-            $this->em->persist($article); // Enregistrement de l'article (query SQL)
-            $this->em->flush($article); // Exécution de l'enregistrement en BDD
-            $this->addFlash('success', "L'article a été créé"); // Message Flash Success
-            return $this->redirectToRoute('articles'); // Redirection vers l'article
-        }
-
-        return $this->render('article/new.html.twig', [
-            'articleForm' => $form, // Envoi du formulaire à la vue
-        ]);
     }
 
     // Route "/article/{slug}/status" pour publier ou archiver un article
