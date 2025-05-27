@@ -23,7 +23,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         // Admin
         $admin = new User();
         $admin
-            ->setEmail($faker->email())
+            ->setEmail('admin@admin.fr')
             ->setPassword($this->hasher->hashPassword($admin, 'admin'))
             ->setWarningCount(0)
             ->setRoles(['ROLE_ADMIN'])
