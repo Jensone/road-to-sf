@@ -239,3 +239,22 @@ sequenceDiagram
     CommentController->>CommentController: delete(comment)
     CommentController-->>User: Redirect to article
 ```
+
+
+### Routes 
+
+| Route                  | Accès                | Fonctionnalités principales                                                                                                  |
+|------------------------|----------------------|-----------------------------------------------------------------------------------------------------------------------------|
+| /articles              | Tout le monde        | Voir tous les articles (pagination, filtrage, cliquables)                                                                   |
+| /article/slug          | Tout le monde        | Lire l'article, lire/écrire des commentaires, fiche auteur, liker, favoris, partager, signaler l'article                    |
+| /authors               | Tout le monde        | Liste des auteurs avec informations                                                                                         |
+| /author/name           | Tout le monde        | Voir tous ses articles, follow l'auteur, voir ses infos                                                                    |
+| /search                | Tout le monde        | Rechercher et consulter les résultats                                                                                       |
+| /dashboard             | Admin                | Toutes les fonctionnalités d'administration                                                                                |
+| /inscription           | Tout le monde        | S'inscrire                                                                                                                  |
+| /connexion             | Tout le monde        | Se connecter                                                                                                                |
+| /                      | Tout le monde        | Derniers articles, articles les plus likés, incitation à l'inscription, navigation, catégories d'articles                  |
+| /profil/name           | Tout le monde (public)| Voir l'activité sur l'app                                                                                                   |
+| /settings              | Connecté             | Gérer ses paramètres et informations personnelles                                                                           |
+| /support               | Connecté             | Ouvrir des tickets de support                                                                                               |
+| /notification          | Connecté             | Voir notifications : likes, auteurs suivis, mentions, suivi de ses articles, follow si auteur                              |
