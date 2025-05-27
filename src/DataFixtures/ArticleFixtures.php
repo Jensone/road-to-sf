@@ -2,15 +2,20 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Article;
 use Faker\Factory;
 use App\Entity\User;
+use App\Entity\Article;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ArticleFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $hasher
+    ) {}
+    
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -18,16 +23,16 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         // Admin
         $admin = new User();
         $admin
-                ->setEmail($faker->email())
-                ->setPassword($faker->password())
-                ->setWarningCount(0)
-                ->setRoles(['ROLE_ADMIN'])
+            ->setEmail($faker->email())
+            ->setPassword($this->hasher->hashPassword($admin, 'admin'))
+            ->setWarningCount(0)
+            ->setRoles(['ROLE_ADMIN'])
         ;
 
         $manager->persist($admin);
         $manager->flush(); // Admin enregistré en base de données
 
-        for ($i=0; $i < 1000; $i++) { 
+        for ($i = 0; $i < 1000; $i++) {
             $article = new Article();
             $article
                 ->setTitle($faker->sentence())
@@ -43,7 +48,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($article);
             $this->addReference('ARTICLE_' . $i, $article);
 
-            if($i % 100 === 0) {
+            if ($i % 100 === 0) {
                 $manager->flush(); // Article enregistré en base de données tous les 10 articles
             }
         }
