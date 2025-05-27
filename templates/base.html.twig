@@ -11,7 +11,7 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-slate-50">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash-{{ label }}">
@@ -19,7 +19,9 @@
                 </div>
             {% endfor %}
         {% endfor %}
-
-        {% block body %}{% endblock %}
+        
+        <main class="container">
+            {% block body %}{% endblock %}
+        </main>
     </body>
 </html>
