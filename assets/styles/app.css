@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    font-family: 'Questrial', sans-serif;
+    @apply text-lg text-slate-700 bg-slate-50;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Funnel Display', serif;
+    @apply font-bold text-slate-900;
+}
+
+a { @apply text-violet-500 hover:text-violet-700 underline; }
+
+a[target="_blank"]::after {}
