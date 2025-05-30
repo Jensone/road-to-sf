@@ -3,17 +3,62 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
-<h1>{{ article.title }} ({{ article.isPublished ? 'Publié' : 'Brouillon' }})</h1>
+{# <img src="{{ asset('medias/images') }}/{{ article.image }}" alt="" class=""> #}
+<header>
+    <img src="{{ article.imagePath }}" alt="" class="h-64 rounded-lg hover:shadow-lg fit-object">
+    <h1>{{ article.title }} ({{ article.isPublished ? '' : 'Brouillon' }})</h1>
+    <div class="">
+        <p class="">Écrit par {{ article.author.email }}</p>
+        {% if article.author == app.user %}
+            {# Actions #}
+            <section class="flex items-center gap-4">
+                {# Modificiation #}
+                <a href="{{ path('article_edit', {'slug': article.slug}) }}" class="flex items-center gap-2">
+                    {{ ux_icon('lucide:file-pen', { class: 'w-5 h-5' }) }}
+                    Modifier
+                </a>
 
-{{ dump(article) }}
+                {# Publication #}
+                <a href="{{ path('article_status', { 'slug': article.slug }) }}?s=publish" class="flex items-center gap-2">
+                    {% if article.isPublished %}
+                        {{ ux_icon('lucide:file-down', { class: 'w-5 h-5 text-red-500' }) }}
+                        Mettre en brouillon
+                    {% else %}
+                        {{ ux_icon('lucide:file-check', { class: 'w-5 h-5 text-green-500' }) }}
+                        Publier
+                    {% endif %}
+                </a>
 
-<a href="{{ path('articles')}}">Retour aux articles</a>
-<a href="{{ path('article_edit', {'slug': article.slug}) }}">Modifier</a>
-<a href="{{ path('article_status', { 'slug': article.slug }) }}?s=publish">{{ article.isPublished ? 'Brouillon' : 'Publier'  }}</a>
-<a href="{{ path('article_status', { 'slug': article.slug }) }}?s=archive">{{ article.isArchived ? 'Désarchiver' : 'Archiver'  }}</a>
-<form action="{{ path('article_delete' , {'slug': article.title}) }}" method="post">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token('article_delete') }}">
-    <button type="submit">Supprimer</button>
-</form>
+                {# Archive #}
+                <a href="{{ path('article_status', { 'slug': article.slug }) }}?s=archive" class="flex items-center gap-2">
+                    {% if article.isArchived %}
+                        {{ ux_icon('lucide:file-lock', { class: 'w-5 h-5 text-red-500' }) }}
+                        Mettre en archive
+                    {% else %}
+                        {{ ux_icon('lucide:file-volume-2', { class: 'w-5 h-5' }) }}
+                        Archiver
+                    {% endif %}
+                </a>
+
+                {# Suppression #}
+                <form action="{{ path('article_delete' , {'slug': article.title}) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token('article_delete') }}">
+                    <button class="flex items-center gap-2">
+                        {{ ux_icon('lucide:file-x', { class: 'w-5 h-5' }) }}  
+                        Supprimer      
+                    </button>
+                </form>
+            </section>
+        {% endif %}
+    </div>
+</header>
+
+<section class="my-10">
+    {{ article.content|raw }}
+</section>
+
+<footer class="text-center my-4">
+    <a href="{{ path('articles')}}">Retour aux articles</a>
+</footer>
 
 {% endblock %}
