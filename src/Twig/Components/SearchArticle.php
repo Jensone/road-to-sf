@@ -27,7 +27,7 @@ final class SearchArticle
     public function getArticles(): array
     {   
         if ($this->query) { // S'il y a une requête, on cherche les articles correspondants
-            return $this->ar->findAll($this->query);
+            return $this->ar->searchByTitle($this->query);
         }
 
         // On retourne les 10 derniers articles par défaut
