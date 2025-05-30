@@ -224,16 +224,97 @@ for ($i = 0; $i < 100; $i++) {
 
 ASTUCE : Pour savoir si des fixtures sont dépendantes en elles, il suffit de consulter le diagramme de classe de l'application.
 
-## Controller
+## Controllers
+
+À l'aide des contrôlleurs, on va pouvoir gérer les actions de l'application suite aux requêtes HTTP réliser par les utilisateurs.
 
 ### Annotations
 
+Les annotations depuis PHP 8, permettent de définir des des actions ou comportements dans le script sans avoir à ajouter d'éléments supplémentaires dans le code.
+
+```php
+#[Route('/articles', name: 'articles', methods: ['GET'])]
+```
+
+Ici, on définit une route à l'aide de la classe `Route` de Symfony. 
+Elle contient les informations suivantes :
+
+- l'URL : `/articles` qui est accessible depuis le navigateur
+- le nom de la route : `articles` qui sera utilisé pour la récupération de la route depuis le code
+- les méthodes HTTP : `GET` qui permet de récupérer les données de l'article
+
 ### Les routes
+
+Une route est contituée de 2 parties :
+
+- l'annotation
+- la méthode (function)
+
+Pour l'annontion, nous avons déjà vu plus haut à quoi cela correspond. Concernant la méthode, c'est à nous de définir le comportement de l'application lorsque la route qui la constitue est appelée.
+
+```php
+public function index(ArticleRepository $ar): Response
+{
+    // ... Votre code ici ...
+}
+```
+
+Le code dans cette partie doit correspondre au scénario que vous avez défini lors de votre préparation pour la conception de l'application.
 
 ### Les données dans une route
 
+Le contrôleur étant le chef d'orchestre de l'application, il est responsable de gérer les actions qui vont se produire. Parmis elles, il s'agira d'afficher des données particulières issues de la base de données.
+
+Pour cela, nous diposons de plusieurs méthodes associées à nos en entités au travers des classes composées du terme `Repository`.
+
+```php
+public function index(ArticleRepository $ar): Response
+{ 
+    $articles = $ar->findAll(); // Récupération de tous les articles
+}
+```
+
 ### La passation à une vue
 
+Pour communiquer avec les vues, nous devons utiliser une méthode spécifique qui se nomme `render()`. Cela nous permet de définir des variables qui seront disponibles dans les templates Twig, afin de les exploiter pour l'affichage et le rendu final.
+
+```php
+public function index(ArticleRepository $ar): Response
+{
+    $articles = $ar->findAll();
+    return $this->render('article/index.html.twig', [
+        'articles' => $articles // Envoi des articles à la vue sous forme de tableau d'objets
+    ]);
+}
+```
+
 ## Twig
+
+Twig est un moteur de template qui permet de générer du HTML. Mais il dispose de fonctionnalités plus avancées que le langage de balisage simple.
+
+Nous pourrons utiliser des "fonctions", "extensions" ou "filtres" pour enrichir le template.
+
+Quelques exemples :
+
+- Afficher une variable : `{{ variable }}`
+- Afficher une liste d'éléments : `{% for item in articles %}<!-- Votre code ici -->{% endfor %}`
+- Définir une section (block) : `{% block title %}Titre de la page{% endblock %}`
+- Construire un lien : `{{ path('article', { 'slug': item.slug }) }}`
+- Inclure un autre template (composants) : `{% include 'article/index.html.twig' %}`
+
+Et plein d'autres. Rendez-vous sur la [documentation officielle](https://twig.symfony.com) pour en savoir plus.
+
+!IMPORTANT! : Pour gérer le CSS et le JS, cela ce passe dans le dossier `assets/` de votre projet. N'hésitez pas à l'explorer pour découvrir sa structure.
+
+Dans le fichier `base.html.twig`, on y trouve le chargement des fichiers CSS et JS au travers de importmap (voir MDN) : 
+
+```twig
+{% block javascripts %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
+{% endblock %}
+```
+
+Vous être libre d'ajouter des librairies ou polices d'écriture comme à l'accoutumée en fonction des besoins de votre projet.
+
 
 ## Live Component
