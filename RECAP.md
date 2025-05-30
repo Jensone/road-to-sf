@@ -224,3 +224,16 @@ for ($i = 0; $i < 100; $i++) {
 
 ASTUCE : Pour savoir si des fixtures sont dépendantes en elles, il suffit de consulter le diagramme de classe de l'application.
 
+## Controller
+
+### Annotations
+
+### Les routes
+
+### Les données dans une route
+
+### La passation à une vue
+
+## Twig
+
+## Live Component
