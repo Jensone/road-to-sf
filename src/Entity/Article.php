@@ -128,6 +128,15 @@ class Article
         return $this->image;
     }
 
+    public function getImagePath(): ?string
+    {
+        $path = '/medias/images/';
+        if ($this->image !== 'default.png') {
+            return $path . $this->image;
+        }
+        return $path = '/medias/images/' . 'default.png';
+    }
+
     public function setImage(string $image): static
     {
         $this->image = $image;
