@@ -160,11 +160,6 @@ final class ArticleController extends AbstractController
             return $this->redirectToRoute('articles');
         }
 
-        if (!$article) { // Ce sera ignorer si l'article existe
-            $this->addFlash('error', "L'article n'existe pas");
-            return $this->redirectToRoute('articles');
-        }
-
         $action = $request->query->get('s');
 
         if($action === 'publish') {
