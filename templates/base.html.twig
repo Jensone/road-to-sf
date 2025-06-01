@@ -4,23 +4,25 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}{% endblock %} • Road to Symfony</title>
-        <link rel="icon" href="#">
+        <link rel="icon" href="https://api.iconify.design/lucide:layers-3.svg" type="image/x-icon">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Questrial&display=swap" rel="stylesheet">
         {% block stylesheets %}
+            <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         {% endblock %}
     </head>
     <body>
-        {% include 'components/flash.html.twig' %}
-        {% include 'components/nav.html.twig' %}
+        <twig:flash />
+        <twig:nav />
         <main class="container mx-auto px-4">
             {% block body %}{% endblock %}
+            <twig:footer />
         </main>
-        {% include 'components/footer.html.twig' %}
     </body>
 </html>

@@ -18,10 +18,12 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 70; $i++) {
+
             $user = new User();
             $user
                 ->setEmail($faker->email())
+                ->setUsername($faker->userName())
                 ->setPassword($this->hasher->hashPassword($user, 'admin'))
                 ->setWarningCount($faker->randomElement([0, 1, 2, 3]))
                 ->setIsBanned($faker->boolean(80))

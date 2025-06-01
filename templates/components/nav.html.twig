@@ -1,18 +1,59 @@
-<nav class="w-full py-4 px-6 flex items-center justify-between link-reset border-b">
-    <div class="">
-        <a href="/" class="">{{ ux_icon('lucide:newspaper', { class: 'h-8 w-8' }) }}</a>
-    </div>
-    <div class="flex items-center gap-4">
-        <a href="#" class="">Nouveautés</a>
-        <a href="#" class="">Catégories</a>
-        {% if app.user %}
-            {% if app.user.articles|length > 0 %}
-                <a href="" class="">Mes articles</a>
-            {% endif %}
-            <a href="{{ path('app_logout') }}" class="">Déconnexion</a>
-        {% else %}
-            <a href="{{ path('app_login') }}" class="">{{ ux_icon('lucide:user-circle', { class: 'h-4 w-4'}) }}</a>
-            <a href="#" class="">S'inscrire</a>
-        {% endif %}
-    </div>
+<nav class="navbar bg-base-100 border-b">
+	<div class="navbar-start">
+		<div class="dropdown">
+			<div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+				<twig:ux:icon name="lucide:menu" class="h-6 w-6"/>
+			</div>
+			<ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+				<li>
+					<a>Homepage</a>
+				</li>
+				<li>
+					<a>Portfolio</a>
+				</li>
+				<li>
+					<a>About</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="navbar-center">
+		<a href="/" class="flex items-center gap-2 cursor-pointer">
+            <twig:ux:icon name="lucide:layers" class="h-6 w-6"/>
+            Road to Symfony
+        </a>
+	</div>
+	<div class="navbar-end">
+		<a href="{{ path('search' ) }}" class="btn btn-ghost btn-circle">
+			<twig:ux:icon name="lucide:search" class="h-6 w-6"/>
+		</a>
+        <div class="dropdown">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                <twig:ux:icon name="lucide:user-circle" class="h-6 w-6"/>
+            </div>
+            <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 -right-0 p-2 shadow">
+                {% if app.user %}
+                <li>
+                    <a href="{{ path('article_new') }}">Rédiger un article</a>
+                </li>
+                <li>
+                    <a href="#">Mes favoris</a>
+                </li>
+                <li>
+                    <a href="#">Mon profil</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_logout') }}">Déconnexion</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{{ path('app_login') }}">Connexion</a>
+                </li>
+                <li>
+                    <a href="#">Inscription</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+	</div>
 </nav>

@@ -20,7 +20,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
 
         // Récupération des utilisateurs nouvellement créés
         $users = [];
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 70; $i++) {
             $users[] = $this->getReference('USER_' . $i, User::class);
         }
 

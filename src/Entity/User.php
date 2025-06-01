@@ -23,6 +23,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
+    #[ORM\Column(length: 180)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $ref = null;
+
     /**
      * @var list<string> The user roles
      */
@@ -64,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->ref = strtolower(uniqid('usr-')); 
         $this->articles = new ArrayCollection();
         $this->comments = new ArrayCollection();
     }
@@ -109,6 +116,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     /**

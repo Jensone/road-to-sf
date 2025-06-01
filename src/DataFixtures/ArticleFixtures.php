@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Article;
+use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -24,6 +25,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         $admin = new User();
         $admin
             ->setEmail('admin@admin.fr')
+            ->setUsername('admin')
             ->setPassword($this->hasher->hashPassword($admin, 'admin'))
             ->setWarningCount(0)
             ->setRoles(['ROLE_ADMIN'])
@@ -32,7 +34,26 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
         $manager->persist($admin);
         $manager->flush(); // Admin enregistré en base de données
 
-        for ($i = 0; $i < 1000; $i++) {
+        $categories = [
+            'Front-end',
+            'Back-end',
+            'DevOps',
+            'Cloud'
+        ];
+
+        $catArray = [];
+        foreach ($categories as $category) {
+            $cat = new Category();
+            $cat->setName($category);
+
+            $manager->persist($cat);
+            array_push($catArray, $cat);
+        }
+
+        $manager->flush();
+
+        // Articles
+        for ($i = 0; $i < 300; $i++) {
             $article = new Article();
             $article
                 ->setTitle($faker->sentence())
@@ -43,6 +64,7 @@ class ArticleFixtures extends Fixture implements DependentFixtureInterface
                 ->setIsPublished($faker->boolean(70))
                 ->setIsArchived($faker->boolean(10))
                 ->setAuthor($admin)
+                ->setCategory($faker->randomElement($catArray))
             ;
 
             $manager->persist($article);

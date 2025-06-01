@@ -1,14 +1,23 @@
-<div{{ attributes }}>
+<div{{ attributes }} class="">
     
-    <input type="text"  data-model="query" placeholder="Tapez un mot-clé..."/>
+    <label class="input mt-10 border">
+        <twig:ux:icon name="lucide:search" class="w-5 h-5"/>
+        <input type="text" data-model="query" class="grow" placeholder="Tapez un mot-clé..." />
+    </label>
 
-    <div class="">
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% set articles = this.articles %} {# Récupération des articles #}
         {% if articles|length > 0 %} {# S'il y a des articles #}
             {% for item in articles %} {# Pour chaque article #}
-                <h3>{{ item.title }}</h3>
-                <a href="{{ path('article', { 'slug': item.slug }) }}">Voir l'article</a>
-                <hr>
+                <div class="card bg-base-100 shadow hover:shadow-xl transition duration-300 ease-in-out col-span-1 h-64">
+                    <a href="{{ path('article', {'slug': item.slug}) }}" class="card-body grid grid-rows-3 justify-center items-center">
+                        <p class="row-span-1 text-sm text-center">Publié il y a {{ item.createdAt|time_diff }}</p>
+                        <h2 class="card-title row-span-2 text-2xl">{{ item.title|slice(0, 120) }}</h2>
+                        {# <div class="card-actions justify-end">
+                            <a href="{{ path('article', {'slug': item.slug}) }}" class="btn btn-primary">Lire l'article</a>
+                        </div> #}
+                    </a>
+                </div>
             {% endfor %}
         {% else %} {# Sinon #}
             <p>Aucun article correspondant</p>
