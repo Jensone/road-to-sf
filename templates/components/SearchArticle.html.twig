@@ -9,15 +9,13 @@
         {% set articles = this.articles %} {# Récupération des articles #}
         {% if articles|length > 0 %} {# S'il y a des articles #}
             {% for item in articles %} {# Pour chaque article #}
-                <div class="card bg-base-100 shadow hover:shadow-xl transition duration-300 ease-in-out col-span-1 h-64">
-                    <a href="{{ path('article', {'slug': item.slug}) }}" class="card-body grid grid-rows-3 justify-center items-center">
-                        <p class="row-span-1 text-sm text-center">Publié il y a {{ item.createdAt|time_diff }}</p>
-                        <h2 class="card-title row-span-2 text-2xl">{{ item.title|slice(0, 120) }}</h2>
-                        {# <div class="card-actions justify-end">
-                            <a href="{{ path('article', {'slug': item.slug}) }}" class="btn btn-primary">Lire l'article</a>
-                        </div> #}
-                    </a>
-                </div>
+                <a href="{{ path('article', {'slug': item.slug}) }}" class="col-span-1 shadow bg-white border-l-2 border-slate-400 rounded-md p-4 grid grid-rows-3 h-44 hover:shadow-xl transition duration-300 ease-in-out">
+                    <p class="row-span-1 flex items-center justify-center gap-2 text-sm hover:text-violet-950">
+                        <twig:ux:icon name="lucide:clock" class="w-3 h-3"/>
+                        Publié il y a {{ item.createdAt|time_diff }}
+                    </p>
+                    <h3 class="row-span-2">{{ item.title }}</h3>
+                </a>
             {% endfor %}
         {% else %} {# Sinon #}
             <p>Aucun article correspondant</p>

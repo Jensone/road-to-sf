@@ -3,13 +3,32 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block body %}
-{# <img src="{{ asset('medias/images') }}/{{ article.image }}" alt="" class=""> #}
-<header>
-    <img src="{{ article.imagePath }}" alt="" class="h-64 rounded-lg hover:shadow-lg fit-object">
-    <h1>{{ article.title }} ({{ article.isPublished ? '' : 'Brouillon' }})</h1>
-    <div class="">
-        <p class="">Écrit par {{ article.author.email }}</p>
-        {% if article.author == app.user %}
+
+    {% if article.isPublished == false %}
+        <p class="text-sm text-center text-white bg-violet-600 mt-10 border p-4 rounded-md">
+            Cette article n'est pas encore publié et n'est visible que par l'auteur.
+        </p>
+    {% endif %}
+
+	<header class="hero rounded-md min-h-72 my-10" style="background-image: url({{ article.imagePath }});">
+		<div class="hero-overlay rounded-md"></div>
+		<div class="hero-content text-slate-50 text-center rounded-md">
+			<div>
+				<h1 class="mb-5 text-5xl text-white">
+                    {{ article.title }}
+                </h1>
+				<p class="mb-5 text-sm">
+					Publié il y a {{ article.createdAt|time_diff }} par {{ article.author.username }}
+				</p>
+			</div>
+		</div>
+	</header>
+
+    {% if article.author == app.user %}
+        <p class="text-sm text-center text-slate-600 mt-10">
+            Cette encart n'est visible que par vous car vous êtes l'auteur de l'article.
+        </p>
+        <div class="border rounded-md p-4 mb-6 flex justify-center bg-slate-50">
             {# Actions #}
             <section class="flex items-center gap-4">
                 {# Modificiation #}
@@ -49,15 +68,16 @@
                     </button>
                 </form>
             </section>
-        {% endif %}
-    </div>
-</header>
+        </div>
+    {% endif %}
 
-<section class="my-10">
+
+<section class="my-10 bg-white rounded-md p-4 border">
     {{ article.content|raw }}
 </section>
 
-<footer class="text-center my-4">
+<footer class="my-4 flex items-center justify-center gap-2 hover:text-violet-950 transition duration-300 ease-in-out">
+    <twig:ux:icon name="lucide:arrow-left" class="w-5 h-5"/>
     <a href="{{ path('articles')}}">Retour aux articles</a>
 </footer>
 

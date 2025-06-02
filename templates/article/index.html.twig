@@ -1,16 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Les articles{% endblock %}
+{% block title %}
+    Les articles
+{% endblock %}
 
 {% block body %}
-<h1>Les articles</h1>
+	<header class="hero rounded-md h-96 my-10" style="background-image: url({{ asset('medias/images/bg-articles.png' )}});">
+		<div class="hero-overlay rounded-md"></div>
+		<div class="hero-content text-slate-50 text-center rounded-md">
+			<div class="max-w-md">
+				<h1 class="mb-5 text-5xl text-white">Les articles</h1>
+				<p class="mb-5">
+					Voici la liste des dèrnières publications sur Road To SF
+				</p>
+			</div>
+		</div>
+	</header>
 
-{% for item in articles %}
-    <h3>{{ item.title }}</h3>
-    <a href="{{ path('article', { 'slug': item.slug }) }}">Voir l'article</a>
-    <hr>
-{% endfor %}
+	<div class="grid grid-cols-3 gap-6">
+		{% for item in articles %}
+		<div class="col-span-1 shadow bg-white border-l-2 border-slate-400 rounded-md p-4 grid grid-rows-3 h-44 hover:shadow-xl transition duration-300 ease-in-out">
+			<h3 class="row-span-2">{{ item.title }}</h3>
+			<a href="{{ path('article', { 'slug': item.slug }) }}" class="row-span-1 flex items-center justify-center gap-2 text-sm hover:text-violet-950"> 
+				<twig:ux:icon name="lucide:eye" class="w-4 h-4"/>
+				Voir l'article
+			</a>
+		</div>
+		{% endfor %}
+	</div>
 
-{{ knp_pagination_render(articles) }}
+<div class="my-8 text-center">
+	{{ knp_pagination_render(articles) }}
+</div>
 
 {% endblock %}
