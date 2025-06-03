@@ -18,7 +18,11 @@
                     {{ article.title }}
                 </h1>
 				<p class="mb-5 text-sm">
-					Publié il y a {{ article.createdAt|time_diff }} par {{ article.author.username }}
+					{% if article.isPublished %}
+                        Publié il y a {{ article.createdAt|time_diff }} par {{ article.author.username }}
+                    {% else %}
+                        Brouillon créé il y a {{ article.createdAt|time_diff }}
+                    {% endif %}
 				</p>
 			</div>
 		</div>
