@@ -26,10 +26,10 @@ class Comment
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?bool $is_moderated = null;
+    private ?bool $is_moderated = false;
 
     #[ORM\Column]
-    private ?bool $is_published = null;
+    private ?bool $is_published = false;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
