@@ -75,14 +75,60 @@
         </div>
     {% endif %}
 
+    <section class="my-10 bg-white rounded-md p-4 border">
+        {{ article.content|raw }}
+    </section>
 
-<section class="my-10 bg-white rounded-md p-4 border">
-    {{ article.content|raw }}
-</section>
+    <section id="comments">
+        <h4 class="pb-4 mb-4 w-fit border-b-2 border-violet-600 hover:border-violet-400">
+            Les commentaires <span class="bg-violet-600 rounded-full px-3 py-1 text-white">{{ article.comments|length }}</span>
+        </h4>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-6 col-span-1">
+                {% for item in article.comments %}
+                    <div class="mb-0">
+                        <div class="bg-neutral-200 border rounded-lg p-4">
+                            {{ item.content }}
+                        </div>
+                        <p class="text-sm pt-1 mb-6 flex items-center gap-2">
+                            <twig:ux:icon name="lucide:user-circle" class="w-5 h-5"/>
+                            {{ item.author.username }}, publié il y a {{ item.createdAt|time_diff }}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+            <form action="" method="post" class="col-span-1 bg-neutral-100 p-4 rounded-md border h-fit">
+                <h5 class="">Participez ou ouvrez la conversation en rédigeant un commentaire</h5>
 
-<footer class="my-4 flex items-center justify-center gap-2 hover:text-violet-950 transition duration-300 ease-in-out">
-    <twig:ux:icon name="lucide:arrow-left" class="w-5 h-5"/>
-    <a href="{{ path('articles')}}">Retour aux articles</a>
-</footer>
+                <div class="border p-4 text-sm rounded-lg bg-slate-50 my-4">
+                    {% if app.user %}
+                        <p>Vous êtes connecté en tant que {{ app.user.username }}</p>
+                    {% else %}
+                        <p>
+                            Vous devez vous connecter pour pouvoir écrire un commentaire. <a href="{{ path('app_login') }}">Se connecter</a>.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token('article_comment') }}">
+                <input type="hidden" name="article" value="{{ article.id }}">
+                
+                <textarea name="content" class="w-full rounded-lg p-4 border border-violet-600 hover:border-violet-400 focus:border-violet-400 mb-4"></textarea>
+
+                {% if app.user %}
+                    <input type="hidden" name="article" value="{{ app.user.id }}">
+                    <button type="submit" class="bg-violet-600 rounded-lg p-4 text-white hover:bg-violet-400">Envoyer</button>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="bg-violet-600 rounded-lg p-4 text-white hover:bg-violet-400">Se connecter</a>
+                {% endif %}
+            </form>
+        </div>
+    </section>
+
+    <footer class="my-4 flex items-center justify-center gap-2 hover:text-violet-950 transition duration-300 ease-in-out">
+        <twig:ux:icon name="lucide:arrow-left" class="w-5 h-5"/>
+        <a href="{{ path('articles')}}">Retour aux articles</a>
+    </footer>
 
 {% endblock %}
