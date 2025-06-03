@@ -20,7 +20,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
 
         // Récupération des utilisateurs nouvellement créés
         $users = [];
-        for ($i = 0; $i < 70; $i++) {
+        for ($i = 0; $i < 50; $i++) {
             $users[] = $this->getReference('USER_' . $i, User::class);
         }
 
@@ -33,7 +33,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         // TODO: Régidiger la création de commentaires pour les articles
 
         foreach ($articles as $item) {
-            $count = $faker->numberBetween(1, 5); // Choisir en 1 et 2
+            $count = $faker->numberBetween(3, 5); // Choisir en 1 et 2
 
             for ($i = 0; $i < $count; $i++) { // Pour le nombre choisi
                 $comment = new Comment();
