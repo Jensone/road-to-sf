@@ -68,6 +68,13 @@ final class ArticleController extends AbstractController
             return $this->redirectToRoute('articles');
         }
 
+        if (!$article->isPublished()) {
+            if ($article->getAuthor() !== $this->getUser()) {
+                $this->addFlash('error', "L'article n'est pas accessible pour le moment."); 
+                return $this->redirectToRoute('articles');
+            }
+        }
+
         return $this->render('article/view.html.twig', [
             'article' => $article
         ]);
