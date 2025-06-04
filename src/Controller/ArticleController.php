@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleForm;
 use App\Repository\ArticleRepository;
+use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ final class ArticleController extends AbstractController
 
     // Route "/article/new" pour créer un article
     #[Route('/new', name: 'article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, UploadService $us): Response
     {
         $article = new Article(); // Nouvel objet article vide
         $form = $this->createForm(ArticleForm::class, $article); // Mise en place du formulaire
@@ -46,6 +47,9 @@ final class ArticleController extends AbstractController
         // Traitement du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setAuthor($this->getUser()); // Récupération de l'utilisateur
+            
+           v 
+            
             $this->em->persist($article); // Enregistrement de l'article (query SQL)
             $this->em->flush($article); // Exécution de l'enregistrement en BDD
             $this->addFlash('success', "L'article a été créé"); // Message Flash Success

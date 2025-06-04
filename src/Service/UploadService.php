@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * namespace App\Service
  * Permet de gérer les téléversements dans l'application
  */
-class UploadSerivce
+class UploadService
 {
 
     public function __construct(
