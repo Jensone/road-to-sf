@@ -88,7 +88,7 @@ final class ArticleController extends AbstractController
 
     // Route "/article/{slug}/edit" menant à la modification d'un article
     #[Route('/{slug}/edit', name: 'article_edit', methods: ['GET', 'POST'])]
-    public function edit(string $slug, Request $request): Response
+    public function edit(string $slug, Request $request, UploadService $us): Response
     {
         $article = $this->ar->findOneBySlug($slug); // Récupération de l'article
 
@@ -103,6 +103,12 @@ final class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) // Si le form est soumis et valide
         {
             try {
+                // traitement de l'image
+                if ($image = $form->get('image')->getData()) {
+                    $us->delete($article->getImage(), 'image'); // Supression de l'image existante
+                    $article->setImage($us->upload($image, 'image'));
+                }
+
                 $this->em->persist($article); // Enregistrement de l'article (query SQL)
                 $this->em->flush($article); // Exécution de l'enregistrement en BDD
                 $this->addFlash('success', 'Modification bien prise en compte'); // Message Flash Success

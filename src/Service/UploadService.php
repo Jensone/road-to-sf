@@ -12,29 +12,42 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class UploadService
 {
+    private array $typeArr = []; // initialisation du tableau
 
-    public function __construct(
-        private ParameterBagInterface $params,
-    ){}
+    public function __construct(private ParameterBagInterface $params)
+    {
+        // Tableau de ref pour les dossiers en focntion des types de fichiers
+        $this->typeArr = [
+            'image' => $this->params->get('upload_folder') . '/images',
+            'document' => $this->params->get('upload_folder') . '/docs',
+            'other' => $this->params->get('upload_folder')
+        ];
+    }
 
-        public function upload(UploadedFile $file, string $type): string
-        {
-            $typeArr= [ // Tableau de ref pour les dossiers en focntion des types de fichiers
-                'image' => $this->params->get('upload_folder') . '/images', 
-                'document' => $this->params->get('upload_folder') . '/docs', 
-                'other' => $this->params->get('upload_folder')
-            ];
-
-            try {
-                $filename = uniqid($type . '-') . '.' . $file->guessExtension(); // Nom généré
-                $file->move($typeArr[$type], $filename); // Déplacement du fichier
-            } catch (\Exception $err) {
-                return $err->getMessage();
-            }
-
-            return $filename; // Retourne le nom du fichier
+    public function upload(UploadedFile $file, string $type): string
+    {
+        try {
+            $filename = uniqid($type . '-') . '.' . $file->guessExtension(); // Nom généré
+            $file->move($this->typeArr[$type], $filename); // Déplacement du fichier
+        } catch (\Exception $err) {
+            return $err->getMessage();
         }
 
+        return $filename; // Retourne le nom du fichier
+    }
 
+    public function delete(string $filename, string $type)
+    {
+        // Résultat : 
+        $file = $this->typeArr[$type] . '/' . $filename;
 
+        try {
+            if (file_exists($file)) { // Vérifie si le fichier existe
+                unlink($file); // Supprime le fichier
+                return true;
+            }
+        } catch (\Exception $err) {
+            return false;
+        }
+    }
 }
