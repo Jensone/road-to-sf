@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * Class UploadSerivce
+ * Class UploadService
  * namespace App\Service
  * Permet de gérer les téléversements dans l'application
  */

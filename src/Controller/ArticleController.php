@@ -48,8 +48,10 @@ final class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setAuthor($this->getUser()); // Récupération de l'utilisateur
             
-           v 
-            
+            if ($image = $form->get('image')->getData()) {
+                $article->setImage($us->upload($image, 'image'));
+            }
+
             $this->em->persist($article); // Enregistrement de l'article (query SQL)
             $this->em->flush($article); // Exécution de l'enregistrement en BDD
             $this->addFlash('success', "L'article a été créé"); // Message Flash Success
