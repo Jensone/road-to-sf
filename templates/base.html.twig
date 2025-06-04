@@ -17,12 +17,12 @@
             <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         {% endblock %}
     </head>
-    <body>
+    <body {{ stimulus_controller('symfony/ux-swup/swup') }}>
         <twig:flash />
         <twig:nav />
-        <main class="container mx-auto px-4">
+        <main id="swup" class="container mx-auto px-4">
             {% block body %}{% endblock %}
-            <twig:footer />
         </main>
+        <twig:footer />
     </body>
 </html>
