@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Form\ArticleForm;
 use App\Repository\ArticleRepository;
 use App\Service\UploadService;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,11 @@ final class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setAuthor($this->getUser()); // Récupération de l'utilisateur
             
+            // Création du slug
+            $slugify = new Slugify();
+            $article->setSlug($slugify->slugify($article->getTitle()));
+
+            // Traitement de l'image
             if ($image = $form->get('image')->getData()) {
                 $article->setImage($us->upload($image, 'image'));
             }
