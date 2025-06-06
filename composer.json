@@ -41,6 +41,7 @@
         "symfony/string": "7.2.*",
         "symfony/translation": "7.2.*",
         "symfony/twig-bundle": "7.2.*",
+        "symfony/ux-dropzone": "^2.26",
         "symfony/ux-icons": "^2.25",
         "symfony/ux-live-component": "^2.25.2",
         "symfony/ux-swup": "^2.25.2",
