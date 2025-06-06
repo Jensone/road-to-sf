@@ -3,10 +3,16 @@
 {% block title %}Création d'un article{% endblock %}
 
 {% block body %}
-<h1>Création d'un article</h1>
+<h1 class="text-center text-3xl my-4">Création d'un article</h1>
+<div class="grid place-items-center">
+    <div class="bg-white shadow-md rounded-lg p-4">
+        {{ form(articleForm) }}
+    </div>
+</div>
 
-{{ form(articleForm) }}
-
-<a href="{{ path('articles') }}">Retour aux articles</a>
+<p class="my-4 flex items-center justify-center gap-2">
+    <twig:ux:icon name="lucide:arrow-left" class="h-6 w-6" />
+    <a href="{{ path('articles') }}" class="text-center my-4">Retour aux articles</a>
+</p>
 
 {% endblock %}
