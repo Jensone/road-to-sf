@@ -29,25 +29,17 @@ class UploadService
         try {
             $filename = uniqid($type . '-') . '.' . $file->guessExtension(); // Nom généré
             $file->move($this->typeArr[$type], $filename); // Déplacement du fichier
-        } catch (\Exception $err) {
-            return $err->getMessage();
-        }
+        } catch (\Exception $err) { return $err->getMessage(); }
 
         return $filename; // Retourne le nom du fichier
     }
 
     public function delete(string $filename, string $type)
     {
-        // Résultat : 
         $file = $this->typeArr[$type] . '/' . $filename;
 
         try {
-            if (file_exists($file)) { // Vérifie si le fichier existe
-                unlink($file); // Supprime le fichier
-                return true;
-            }
-        } catch (\Exception $err) {
-            return false;
-        }
+            if (file_exists($file)) { unlink($file); }
+        } catch (\Exception $err) { return $err->getMessage(); }
     }
 }

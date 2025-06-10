@@ -20,6 +20,7 @@ class ArticleForm extends AbstractType
     {
         $builder
             ->add('title', TextType::class,[
+                'label' => "Titre de l'article",
                 'attr' => ['placeholder' => "Titre de l'article"],
             ])
             ->add('category', EntityType::class, [

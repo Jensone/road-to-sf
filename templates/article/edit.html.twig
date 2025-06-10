@@ -5,7 +5,17 @@
 {% block body %}
 <h1>Modification de {{ article.title }}</h1>
 
-{{ form(articleForm) }}
+{{ form_start(articleForm) }}
+    {{ form_row(articleForm.title) }}
+    {{ form_row(articleForm.category) }}
+    <label for="slug">Slug de l'article</label>
+    <input type="text" name="slug-edit" value="{{ article.slug }}">
+    {{ form_row(articleForm.image) }}
+    {{ form_row(articleForm.keywords) }}
+    {{ form_row(articleForm.description) }}
+    {{ form_row(articleForm.content) }}
+    {{ form_row(articleForm.submit) }}
+{{ form_end(articleForm) }}
 
 <a href="{{ path('article', {'slug': article.slug }) }}">Retour à l'article</a>
 

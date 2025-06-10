@@ -114,11 +114,18 @@ final class ArticleController extends AbstractController
                     $us->delete($article->getImage(), 'image'); // Supression de l'image existante
                     $article->setImage($us->upload($image, 'image'));
                 }
-
-                // Traitement du slug si il a changé
-                if ($slug = $form->get('slug')->getData() !== $article->getSlug()) {
-                    $slugify = new Slugify();
-                    $article->setSlug($slugify->slugify($slug));
+                
+                // Traitement du slug s'il a changé
+                if ($slug = $request->get('slug-edit')) {                    
+                    
+                    $slugify = new Slugify(); // initialisation du slugify
+                    
+                    if ($article->getSlug() !== $slug) { // si le slug a changé
+                        $article->setSlug($slugify->slugify($slug)); // on le met à jour
+                    } else { // sinon
+                        // on met à jour le slug avec son titre par défaut
+                        $article->setSlug($slugify->slugify($article->getTitle()));
+                    }
                 }
 
                 $this->em->persist($article); // Enregistrement de l'article (query SQL)
@@ -129,7 +136,7 @@ final class ArticleController extends AbstractController
             }
 
             // Redirection vers l'article modifié
-            return $this->redirectToRoute('article', ['slug' => $slug]);
+            return $this->redirectToRoute('article', ['slug' => $article->getSlug()]);
         }
 
         return $this->render('article/edit.html.twig', [
