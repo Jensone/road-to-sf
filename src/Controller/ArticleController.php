@@ -115,6 +115,12 @@ final class ArticleController extends AbstractController
                     $article->setImage($us->upload($image, 'image'));
                 }
 
+                // Traitement du slug si il a changé
+                if ($slug = $form->get('slug')->getData() !== $article->getSlug()) {
+                    $slugify = new Slugify();
+                    $article->setSlug($slugify->slugify($slug));
+                }
+
                 $this->em->persist($article); // Enregistrement de l'article (query SQL)
                 $this->em->flush($article); // Exécution de l'enregistrement en BDD
                 $this->addFlash('success', 'Modification bien prise en compte'); // Message Flash Success
@@ -160,19 +166,19 @@ final class ArticleController extends AbstractController
     }
 
     // Route "/article/{slug}/archive" pour publier un article
-    #[Route('/{slug}/archive', name: 'article_archive', methods: ['GET'])]
-    public function archive(string $slug): Response
-    {
+    // #[Route('/{slug}/archive', name: 'article_archive', methods: ['GET'])]
+    // public function archive(string $slug): Response
+    // {
 
-        // Récupérer l'article
-        // Vérifier que l'article existe
-        // Vérifier que l'article est archivé
-        // OUI : Le désarchiver
-        // NON : L'archiver
-        // Enregistrer les modifications
-        // Rediriger vers l'article
+    //     // Récupérer l'article
+    //     // Vérifier que l'article existe
+    //     // Vérifier que l'article est archivé
+    //     // OUI : Le désarchiver
+    //     // NON : L'archiver
+    //     // Enregistrer les modifications
+    //     // Rediriger vers l'article
 
-    }
+    // }
 
     // Route "/article/{slug}/status" pour publier ou archiver un article
     #[Route('/{slug}/status', name: 'article_status', methods: ['GET'])]
