@@ -1,7 +1,9 @@
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div id="flash-message" class="flash-{{ label }} rounded-lg shadow-sm p-3 mb-2">
-            {{ message }}
-        </div>
+<div class="flex justify-center items-center w-full fixed bottom-2">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div id="flash-message" class="flash-{{ label }} rounded-lg shadow-sm p-3 mb-2 bg-white max-w-screen-sm">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+</div>
