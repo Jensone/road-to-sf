@@ -45,8 +45,9 @@ EOT;
         $client = Gemini::client($this->param->get('GEMINI_KEY'));
         $result = $client->generativeModel(model: 'gemini-2.0-flash')->generateContent($prompt);
 
-        if ($result->text() == "false\n") {
-            // Modification en fonction du résultat
+        $boolean = explode("\n", $result->text())[0]; // Extraire le boolean
+        
+        if ($boolean == 'false') {
             $comment->setIsModerated(true)->setIsPublished(true);
             $this->em->persist($comment);
             $this->em->flush();
