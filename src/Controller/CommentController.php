@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Repository\ArticleRepository;
+use App\Service\ModerationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +18,8 @@ final class CommentController extends AbstractController
             int $article, 
             Request $request, // permet de gérer les requêtes HTTP (params, etc..)
             ArticleRepository $ar,
-            EntityManagerInterface $em // permet d'interagir avec la BDD
+            EntityManagerInterface $em, // permet d'interagir avec la BDD
+            ModerationService $ms
     ): Response {
         $articleComment = $ar->find($article); // Récupération de l'article
         $user = $this->getUser(); // Récupération de l'utilisateur en cours
@@ -35,6 +37,10 @@ final class CommentController extends AbstractController
 
         $em->persist($comment); // Enregistrement de l'article (query SQL)
         $em->flush($comment); // Exécution de l'enregistrement en BDD
+
+        $ms->checkComment($comment); // Appel de la méthode de modération
+
+        // dd($comment);
 
         $this->addFlash('success', "Votre commentaire est en cours de traitement");
         return $this->redirectToRoute('article', ['slug' => $articleComment->getSlug()]);

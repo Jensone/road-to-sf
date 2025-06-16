@@ -114,7 +114,7 @@
                     {% endif %}
                 </div>
 
-                <input type="hidden" name="csrf_token" value="{{ csrf_token('article_comment') }}">                
+                <input type="hidden" name="csrf_token" value="{{ csrf_token('comment_new') }}">                
                 <textarea name="content" class="w-full rounded-lg p-4 border border-violet-600 hover:border-violet-400 focus:border-violet-400 mb-4"></textarea>
 
                 {% if app.user %}
